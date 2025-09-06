@@ -1,29 +1,29 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Stack } from "expo-router";
+import { StyleSheet, useColorScheme, View } from "react-native";
+import Header from "../app/components/Header";
+import { OrdersProvider } from "../app/context/OrdersContext";
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
-
-  if (!loaded) {
-    // Async font loading only occurs in development.
-    return null;
-  }
+  const scheme = useColorScheme();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <OrdersProvider>
+      <View
+        style={[
+          styles.container,
+          { backgroundColor: scheme === "dark" ? "#1F2937" : "#fff" },
+        ]}
+      >
+        {/* Persistent Header */}
+        <Header title="Fourat Palace" />
+
+        {/* Stack renders the screens below the header */}
+        <Stack screenOptions={{ headerShown: false }} />
+      </View>
+    </OrdersProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+});
